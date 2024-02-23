@@ -5,6 +5,32 @@ import TwitterCardMeta from "../components/meta/TwitterCardMeta";
 import { SocialList } from "../components/SocialList";
 
 export default function Index() {
+  const [isPortrait, setIsPortrait] = useState(window.matchMedia("(orientation: portrait)").matches);
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia("(orientation: portrait)");
+        
+        const handleOrientationChange = (e) => {
+            setIsPortrait(e.matches);
+        };
+
+        mediaQuery.addEventListener("change", handleOrientationChange);
+
+        // Cleanup function
+        return () => {
+            mediaQuery.removeEventListener("change", handleOrientationChange);
+        };
+    }, []);
+
+    return (
+        <div>
+            {isPortrait ? (
+                <p>Portrait Mode</p>
+            ) : (
+                <p>Landscape Mode</p>
+            )}
+        </div>
+    );
   return (
     <Layout>
       <BasicMeta url={"/"} />
@@ -15,8 +41,11 @@ export default function Index() {
           <h1>
             Hi, We're Next.js & Netlify<span className="fancy">.</span>
           </h1>
-          <span className="handle">@nextjs-netlify-blog</span>
-          <h2>A blog template with Next.js and Netlify.</h2>
+         <div>{isPortrait ? (
+                <h1>Portrait Mode</h1>
+            ) : (
+                <h1>Landscape Mode</h1>
+            )}</div>
           <SocialList />
         </div>
       </div>
